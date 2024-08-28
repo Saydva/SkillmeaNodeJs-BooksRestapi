@@ -1,4 +1,5 @@
 const { v4: uuid } = require("uuid");
+const uid = uuid();
 
 let books = [
   {
@@ -12,4 +13,4 @@ let books = [
   { id: uuid(), type: "Pevná šitá väzba", title: "Červený stan", price: 6.99 },
 ];
 
-module.exports = books;
+module.exports = { books, uid };
