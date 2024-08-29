@@ -20,24 +20,17 @@ app.get("/books/:id", (req, res) => {
 
 app.post("/books/", (req, res) => {
   const { title, type, price } = req.body;
-  if (!title) {
-    res.status(404).send({ message: `no ${title}` });
-  } else {
+  if (title && type && price) {
     let newBook = {
-      title,
-      type,
-      price,
-    };
-
-    newBook = {
       id: uuid(),
       title: title,
       type: type,
       price: price,
     };
-
     arr.push(newBook);
     res.status(201).send(newBook);
+  } else {
+    res.status(400).send({ message: `Eror .Please define atributes!!` });
   }
 });
 
@@ -47,16 +40,23 @@ app.patch("/books/:id", (req, res) => {
   let result = arr.find((element) => {
     return element.id == id;
   });
-  if (title) {
-    (result.title = title),
-      res.send({ message: `book is updated with ${result.title}` });
-  }
-  if (type) {
+  if (price) {
+    (result.price = price),
+      res.send({
+        message: `kniha ${result.title} ma novu cenu : ${result.price} `,
+      });
+  } else if (type) {
     (result.type = type),
-      res.send({ message: `book is updated with ${result.type}` });
+      res.send({
+        message: `kniha ${result.title} je odteraz : ${result.type} `,
+      });
   } else {
     res.send({ message: "please define some of the atributes" });
   }
+});
+
+app.get("*", (req, res) => {
+  res.status(404).send({ message: "Upsss! Táto stránka neexistuje!" });
 });
 
 app.listen(3000, () => {
