@@ -1,18 +1,18 @@
 const express = require("express");
 const app = express();
-const arr = require("./booksArr");
+let books = require("./booksArr");
 const { v4: uuid } = require("uuid");
 
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 app.get("/books", (req, res) => {
-  res.send(["arr length is: " + arr.length, arr]);
+  res.send(["books length is: " + books.length, books]);
 });
 
 app.get("/books/:id", (req, res) => {
   const { id } = req.params;
-  const result = arr.find((element) => {
+  const result = books.find((element) => {
     return element.id == id;
   });
   res.send(result);
@@ -27,7 +27,7 @@ app.post("/books/", (req, res) => {
       type: type,
       price: price,
     };
-    arr.push(newBook);
+    books.push(newBook);
     res.status(201).send(newBook);
   } else {
     res.status(400).send({ message: `Eror .Please define atributes!!` });
@@ -35,9 +35,9 @@ app.post("/books/", (req, res) => {
 });
 
 app.patch("/books/:id", (req, res) => {
+  const { type, price } = req.body;
   const { id } = req.params;
-  const { title, type, price } = req.body;
-  let result = arr.find((element) => {
+  const result = books.find((element) => {
     return element.id == id;
   });
   if (price) {
@@ -53,6 +53,12 @@ app.patch("/books/:id", (req, res) => {
   } else {
     res.send({ message: "please define some of the atributes" });
   }
+});
+
+app.delete("/books/:id", (req, res) => {
+  const { id } = req.params;
+  books = books.filter((book) => book.id !== id);
+  res.send({ message: `film s${id} bol vymazany  ${books.length}` });
 });
 
 app.get("*", (req, res) => {
