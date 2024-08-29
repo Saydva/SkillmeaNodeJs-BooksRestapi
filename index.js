@@ -15,7 +15,11 @@ app.get("/books/:id", (req, res) => {
   const result = books.find((element) => {
     return element.id == id;
   });
-  res.send(result);
+  if (result) {
+    res.send(result);
+  } else {
+    res.send({ message: " Bokk not find" });
+  }
 });
 
 app.post("/books/", (req, res) => {
@@ -57,8 +61,15 @@ app.patch("/books/:id", (req, res) => {
 
 app.delete("/books/:id", (req, res) => {
   const { id } = req.params;
-  books = books.filter((book) => book.id !== id);
-  res.send({ message: `film s${id} bol vymazany  ${books.length}` });
+  const result = books.find((element) => {
+    return element.id == id;
+  });
+  if (result) {
+    books = books.filter((book) => book.id !== id);
+    res.send({ message: `film s${id} bol vymazany  ${books.length}` });
+  } else {
+    res.send({ message: "Book with this id dont exist" });
+  }
 });
 
 app.get("*", (req, res) => {
