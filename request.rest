@@ -5,6 +5,7 @@ GET http://localhost:3000/books/1
 
 ###
 POST  http://localhost:3000/books
+Content-Type: application/json
 
 {
     "title":"Dodo",
@@ -15,8 +16,9 @@ POST  http://localhost:3000/books
 ###
 DELETE http://localhost:3000/books/1
 ###
-Patch http://localhost:3000/books/c0a67dcb-3aee-4ba1-8fca-ca4c5ff19de6
+Patch http://localhost:3000/books/1
 Content-Type: application/json
+
 {
     "type": "Pevná nešitá väzba"
 }
