@@ -1,34 +1,28 @@
-const express = require("express");
-let books = require("../booksArr");
-const { v4: uuid } = require("uuid");
+const { getAllBooks } = require("../models/bookArrModel");
+const { bookDelete } = require("../models/bookArrModel");
+
+const { result } = require("../models/bookArrModel");
+const { createNewBook } = require("../models/bookArrModel");
 
 const getMovie = (req, res) => {
-  res.send(["books length is: " + books.length, books]);
+  res.send(getAllBooks());
 };
 
 const getOne = (req, res) => {
   const { id } = req.params;
-  const result = books.find((element) => {
-    return element.id == id;
-  });
-  if (result) {
-    res.send(result);
+  let succes = result(id);
+  if (succes) {
+    res.send(succes);
   } else {
-    res.send({ message: " Bokk not find" });
+    res.send({ message: " Boook not find" });
   }
 };
 
 const postNew = (req, res) => {
   const { title, type, price } = req.body;
   if (title && type && price) {
-    let newBook = {
-      id: uuid(),
-      title: title,
-      type: type,
-      price: price,
-    };
-    books.push(newBook);
-    res.status(201).send(newBook);
+    const book = createNewBook(title, type, price);
+    res.status(201).send(book);
   } else {
     res.status(400).send({ message: `Eror .Please define atributes!!` });
   }
@@ -37,18 +31,16 @@ const postNew = (req, res) => {
 const patchBook = (req, res) => {
   const { type, price } = req.body;
   const { id } = req.params;
-  const result = books.find((element) => {
-    return element.id == id;
-  });
+  let succes = result(id);
   if (price) {
-    (result.price = price),
+    (succes.price = price),
       res.send({
-        message: `kniha ${result.title} ma novu cenu : ${result.price} `,
+        message: `kniha ${succes.title} ma novu cenu : ${succes.price} `,
       });
   } else if (type) {
-    (result.type = type),
+    (succes.type = type),
       res.send({
-        message: `kniha ${result.title} je odteraz : ${result.type} `,
+        message: `kniha ${succes.title} je odteraz : ${succes.type} `,
       });
   } else {
     res.send({ message: "please define some of the atributes" });
@@ -57,14 +49,12 @@ const patchBook = (req, res) => {
 
 const deleteBook = (req, res) => {
   const { id } = req.params;
-  const result = books.find((element) => {
-    return element.id == id;
-  });
-  if (result) {
-    books = books.filter((book) => book.id !== id);
-    res.send({ message: `film s${id} bol vymazany  ${books.length}` });
+  const find = result(id);
+  if (find) {
+    bookDelete(id);
+    res.send({ message: `Knih s nazvom ${id} bola vymazana` });
   } else {
-    res.send({ message: "Book with this id dont exist" });
+    res.send("not found");
   }
 };
 

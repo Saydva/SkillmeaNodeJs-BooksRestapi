@@ -1,0 +1,29 @@
+let books = require("../booksArr");
+const { v4: uuid } = require("uuid");
+
+const getAllBooks = () => {
+  return ["books length is: " + books.length, books];
+};
+
+const result = (id) => {
+  let success = books.find((el) => el.id === id);
+  return success;
+};
+
+const createNewBook = (title, type, price) => {
+  let newBook = {
+    id: uuid(),
+    title: title,
+    type: type,
+    price: price,
+  };
+  books.push(newBook);
+  return newBook;
+};
+
+const bookDelete = (id) => {
+  let book = books.filter((book) => book.id != id);
+  books = book;
+};
+
+module.exports = { getAllBooks, result, createNewBook, bookDelete };
