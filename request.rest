@@ -14,12 +14,12 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:3000/books/1
-
-###
 Patch http://localhost:3000/books/1
 Content-Type: application/json
 
 {
     "price": 900
 }
+
+###
+DELETE http://localhost:3000/books/1
